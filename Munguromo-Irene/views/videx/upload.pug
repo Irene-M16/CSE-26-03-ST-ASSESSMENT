@@ -1,0 +1,101 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title Videx - Upload Video
+    link(rel="stylesheet" href="/css/videx.css")
+  body.upload-page
+
+    main.upload-main
+      h1.upload-heading Upload your video
+
+      //- Green success alert shown after a video is saved
+      if successMsg
+        .alert.alert-success
+          span= successMsg
+          button.alert-close(onclick="this.parentElement.remove()") x
+
+      //- Red error alert shown when server-side validation fails
+      if errorMsg
+        .alert.alert-error
+          span= errorMsg
+          button.alert-close(onclick="this.parentElement.remove()") x
+
+      //- novalidate: we handle all validation ourselves in upload.js
+      form#uploadForm(action="/videx/upload" method="POST" enctype="multipart/form-data" novalidate)
+        .form-layout
+
+          //- LEFT COLUMN: text fields
+          .form-left
+
+            .field-group
+              input#title.form-input(
+                type="text"
+                name="title"
+                placeholder="Video Title"
+                value=formData ? formData.title : ''
+              )
+              //- error message injected here by upload.js
+              span.field-error#titleError
+
+            .field-group
+              textarea#description.form-textarea(
+                name="description"
+                placeholder="Description (Optional)"
+                rows="8"
+              )= formData ? formData.description : ''
+
+            .field-group
+              .select-wrap
+                select#quality.form-select(name="quality")
+                  option(value="" disabled selected) Video quality
+                  option(value="360"  selected=(formData && formData.quality === '360'))  360
+                  option(value="480"  selected=(formData && formData.quality === '480'))  480
+                  option(value="720"  selected=(formData && formData.quality === '720'))  720
+                  option(value="1080" selected=(formData && formData.quality === '1080')) 1080
+                  option(value="1440" selected=(formData && formData.quality === '1440')) 1440
+                  option(value="2160" selected=(formData && formData.quality === '2160')) 2160
+                span.chevron &#8964;
+              span.field-error#qualityError
+
+            .field-group
+              .date-wrap
+                input#publishDate.form-input(
+                  type="date"
+                  name="publishDate"
+                  placeholder="Date of Publishing"
+                  value=formData ? formData.publishDate : ''
+                )
+                span.cal-icon 📅
+              span.field-error#dateError
+
+          //- RIGHT COLUMN: file upload zones + submit button
+          .form-right
+
+            //- Video file upload zone (solid grey background)
+            .field-group
+              label.upload-zone.video-zone(for="videoFile")
+                input#videoFile(type="file" name="video" accept="video/*" style="display:none")
+                .upload-zone-inner
+                  svg.upload-icon(viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.5")
+                    path(d="M12 16V4m0 0L8 8m4-4l4 4")
+                    path(d="M20 16.5A3.5 3.5 0 0 0 16.5 13H15a5 5 0 1 0-9.9 1")
+                  span#videoLabel Upload video
+              span.field-error#videoError
+
+            //- Thumbnail image upload zone (dashed border)
+            .field-group
+              label.upload-zone.thumb-zone(for="thumbFile")
+                input#thumbFile(type="file" name="thumbnail" accept="image/*" style="display:none")
+                .upload-zone-inner
+                  svg.upload-icon(viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.5")
+                    path(d="M12 16V4m0 0L8 8m4-4l4 4")
+                    path(d="M20 16.5A3.5 3.5 0 0 0 16.5 13H15a5 5 0 1 0-9.9 1")
+                  span#thumbLabel Upload Thumbnail
+
+            //- Submit button
+            button.upload-btn(type="submit") UPLOAD
+
+    //- Client-side validation + file preview script
+    script(src="/js/videx-upload.js")

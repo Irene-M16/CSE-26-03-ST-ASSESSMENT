@@ -1,0 +1,47 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title Videx - Dashboard
+    link(rel="stylesheet" href="/css/videx.css")
+  body.dashboard-page
+
+    //- Top navbar
+    header.navbar
+      a.nav-logo(href="/videx")
+        svg.logo-icon.small(viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg")
+          circle(cx="22" cy="22" r="22" fill="red")
+          polygon(points="17,13 35,22 17,31" fill="white")
+        span.logo-text.small Videx
+      //- Button to go to the upload form
+      a.add-video-btn(href="/videx/upload") Add Video
+
+    main.dashboard-main
+      h2.section-title Videos
+      .divider
+
+      //- Show message if no videos have been uploaded yet
+      if videos.length === 0
+        p.no-videos No videos yet. Be the first to upload!
+
+      //- Loop through videos (newest first) and render each card
+      else
+        .video-grid
+          each video in videos
+            .video-card
+              .video-thumbnail
+                if video.thumbnailPath
+                  img(src=`/${video.thumbnailPath}` alt=video.title)
+                else if video.videoPath
+                  video(src=`/${video.videoPath}` controls)
+                else
+                  .thumb-placeholder
+              .video-info
+                .video-title-row
+                  p.video-title= video.title
+                  button.more-btn ⋮
+                //- views count and time since upload (e.g. "999k views · 2 weeks ago")
+                p.video-meta(data-upload-time=video.createdAt ? video.createdAt.getTime() : 0)
+                  span.views= `${video.views || 0}k views · `
+                  span.time-ago= video.timeAgo

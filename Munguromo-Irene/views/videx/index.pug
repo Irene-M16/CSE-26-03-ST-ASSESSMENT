@@ -1,0 +1,20 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title Videx
+    link(rel="stylesheet" href="/css/videx.css")
+  body.landing-page
+
+    .landing-center
+
+      //- Logo: red play button icon + "Videx" text
+      .logo-wrap
+        svg.logo-icon(viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg")
+          circle(cx="22" cy="22" r="22" fill="red")
+          polygon(points="17,13 35,22 17,31" fill="white")
+        span.logo-text Videx
+
+      //- JOIN button goes to the dashboard
+      a.join-btn(href="/videx/dashboard") JOIN
